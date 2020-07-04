@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>movie search</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+</head>
+<br><br><br>
+
+<br><br><br>
+<body>
+<div class="container">
+    <div class="col-md-12">
+        <head>
+            <h1>DB_201511291 장유준 영화 검색 웹사이트 기말 과제</h1>
+        </head>
+        <br>
+        <br>
+
+        <table class="table table-striped">
+            <form method="post" class="post-form">
+                {% csrf_token %}
+                <thead>
+                <tr>
+                    <td><B>검색조건</B></td>
+                    <td><B>선택</B></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>장르</td>
+                    <td>
+<!--                        <input type="text" placeholder="장르이름" name="genre" class="form-control" style="border:1"/>-->
+                    <select name="genre" class="form-control">
+                        <option value="All genre">All genre</option>
+                        <option value="unknown">unknown</option>
+                        <option value="Action">Action</option>
+                        <option value="Adventure">Adventure</option>
+                        <option value="Animation">Animation</option>
+                        <option value="Children's">Children's</option>
+                        <option value="Comedy">Comedy</option>
+                        <option value="Crime">Crime</option>
+                        <option value="Documentary">Documentary</option>
+                        <option value="Drama">Drama</option>
+                        <option value="Fantasy">Fantasy</option>
+                        <option value="Film-Noir">Film-Noir</option>
+                        <option value="Horror">Horror</option>
+                        <option value="Musical">Musical</option>
+                        <option value="Romance">Romance</option>
+                        <option value="Sci-Fi">Sci-Fi</option>
+                        <option value="Thriller">Thriller</option>
+                        <option value="War">War</option>
+                        <option value="Western">Western</option>
+                    </select>
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>최소평점</td>
+                    <td><input type="text" placeholder="평점" name="min_rating" class="form-control" style="border:1"/></td>
+
+                    <td>최대평점</td>
+                    <td><input type="text" placeholder="평점" name="max_rating" class="form-control" style="border:1"/></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+
+                <tr>
+                    <td>사용자의 직업</td>
+                    <td><input type="text" placeholder="직업" name="occupation" class="form-control" style="border:1"/></td>
+                    <td>사용자의 성별</td>
+                    <td><div class="form-control">
+                      <input type="radio" id="male" name="gender" value="M">
+                      <label for="male">Male</label>
+                      <input type="radio" id="female" name="gender" value="F">
+                      <label for="female">Female</label>
+                    </div></td>
+                    <td>사용자의 나이대</td>
+
+                    <td>
+                    <select name="age" class="form-control">
+                        <option value="all">전체</option>
+                        <option value="0">0~9세</option>
+                        <option value="10">10~19세</option>
+                        <option value="20">20~29세</option>
+                        <option value="30">30~39세</option>
+                        <option value="40">40~49세</option>
+                        <option value="50">50~59세</option>
+                        <option value="60">60~69세</option>
+                        <option value="70">70~79세</option>
+
+                    </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>정렬기준</td>
+                    <td>
+                        <select name="sort" class="form-control">
+                            <option value="mid">movie id</option>
+                            <option value="votes">votes 수</option>
+                            <option value="title">title</option>
+                            <option value="avg_rate">평점</option>
+                        </select>
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+
+                <tr>
+                    <td colspan="2">
+                        <button type="submit" class="save btn btn-info float-right" style="margin-right:10px">검색</button>
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                </tbody>
+            </form>
+        </table>
+    </div>
+</div>
+<br>
+<br>
+<div class="container">
+    <table class="table table-striped">
+        <thead>결과 <br> genre : {{ genre }} / max : {{ max_rating }} , min : {{ min_rating }} / 사용자 : {{ occupation }}, {{ gender }}, {{ age }}대 / 정렬기준 : {{ sort }}</thead>
+        <br>
+        <br>
+        <br>
+
+        <tr>
+            <td align="center"><b>번호</b></td>
+            <td><b>title</b></td>
+            <td><b>평점</b></td>
+            <td><b>장르</b></td>
+            <td><b>별점갯수</b></td>
+
+        </tr>
+        {% for i in data  %}
+        <tr>
+            <td width="5%" align="center">{{ i.mid_id }}</td>
+            <td width="30%">{{ i.title }}</td>
+            <td>{{ i.avg_rate }}</td>
+            <td>{{ i.genre_name }}</td>
+            <td>{{ i.votes }}</td>
+        </tr>
+        {% endfor %}
+
+    </table>
+</div>
+</body>
