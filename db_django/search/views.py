@@ -1,6 +1,9 @@
 from django.shortcuts import render
-from .models import *
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 
+from .models import *
+from .serializers import UserSerializer
 
 def index(request):
     data_all = Data.objects
@@ -82,3 +85,33 @@ def index(request):
         return render(request, 'search/index.html', context)
 
     return render(request, 'search/index.html')
+
+
+@api_view(['GET', 'POST'])
+def user(request):
+    User_queryset = User.objects.all()
+    serializer_class = UserSerializer(User_queryset, many=True)
+
+    if request.method == 'GET':
+        return Response(serializer_class.data)
+    else:
+        serializer = UserSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=201)
+        return Response(serializer.errors, status=400)
+
+
+@api_view(['GET', 'POST'])
+def user_detail(request, no):
+    User_queryset = User.objects.all().filter(uid=no)
+    serializer_class = UserSerializer(User_queryset, many=True)
+
+    if request.method == 'GET':
+        return Response(serializer_class.data)
+    else:
+        serializer = UserSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=201)
+        return Response(serializer.errors, status=400)
