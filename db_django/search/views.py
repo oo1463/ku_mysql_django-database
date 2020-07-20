@@ -5,6 +5,14 @@ from rest_framework.response import Response
 from .models import *
 from .serializers import UserSerializer
 
+import requests
+import json
+import urllib
+import sys
+from urllib.request import urlopen  # for Python 3.x
+import pandas as pd
+
+
 def index(request):
     data_all = Data.objects
 
@@ -115,3 +123,20 @@ def user_detail(request, no):
             serializer.save()
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
+
+
+def wave(request):
+    # res = requests.get('http://www.khoa.go.kr/oceangrid/grid/api/fcIndexOfType/search.do?ServiceKey=3RbYJ6EqWGFqsBTugldpZA==&Type=BE&ResultType=json')
+    #
+    # info = json.load(res.text)
+
+    # print(info)
+
+    with urlopen("http://www.khoa.go.kr/oceangrid/grid/api/fcIndexOfType/search.do?ServiceKey=3RbYJ6EqWGFqsBTugldpZA==&Type=BE&ResultType=json") as url:
+        sea_json_file = url.read()
+
+    sea_json = json.loads(sea_json_file.decode('utf-8'))
+
+    # print(sea_json['result']['data'][0],sea_json['result']['data'][1],)
+    print(json.dumps(sea_json['result']['data'][0], indent=4, ensure_ascii=False))
+
